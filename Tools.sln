@@ -3,9 +3,49 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code", "Code", "{C84F2262-A203-4162-A58D-6D158F2D7BF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agbm.Helpers", "Code\Agbm.Helpers\Agbm.Helpers.csproj", "{12FAA7BD-A5D4-48E3-80C4-6D7A72BE99B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agbm.NpoiExcel", "Code\Agbm.NpoiExcel\Agbm.NpoiExcel.csproj", "{47680BF8-C76A-44B9-BDE3-694F1A73CCB1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DFAF01BA-B1F0-405A-B906-CDEE25730BE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agbm.Helpers.Tests", "Tests\Agbm.Helpers.Tests\Agbm.Helpers.Tests.csproj", "{8C7C647B-6A28-477E-8B1F-9FB555F55376}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agbm.NpoiExcel.Tests", "Tests\Agbm.NpoiExcel.Tests\Agbm.NpoiExcel.Tests.csproj", "{0943E858-2173-4084-AFC8-C0524D8CB825}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{12FAA7BD-A5D4-48E3-80C4-6D7A72BE99B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12FAA7BD-A5D4-48E3-80C4-6D7A72BE99B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12FAA7BD-A5D4-48E3-80C4-6D7A72BE99B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12FAA7BD-A5D4-48E3-80C4-6D7A72BE99B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47680BF8-C76A-44B9-BDE3-694F1A73CCB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47680BF8-C76A-44B9-BDE3-694F1A73CCB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47680BF8-C76A-44B9-BDE3-694F1A73CCB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47680BF8-C76A-44B9-BDE3-694F1A73CCB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C7C647B-6A28-477E-8B1F-9FB555F55376}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C7C647B-6A28-477E-8B1F-9FB555F55376}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C7C647B-6A28-477E-8B1F-9FB555F55376}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C7C647B-6A28-477E-8B1F-9FB555F55376}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0943E858-2173-4084-AFC8-C0524D8CB825}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0943E858-2173-4084-AFC8-C0524D8CB825}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0943E858-2173-4084-AFC8-C0524D8CB825}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0943E858-2173-4084-AFC8-C0524D8CB825}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{12FAA7BD-A5D4-48E3-80C4-6D7A72BE99B0} = {C84F2262-A203-4162-A58D-6D158F2D7BF9}
+		{47680BF8-C76A-44B9-BDE3-694F1A73CCB1} = {C84F2262-A203-4162-A58D-6D158F2D7BF9}
+		{8C7C647B-6A28-477E-8B1F-9FB555F55376} = {DFAF01BA-B1F0-405A-B906-CDEE25730BE4}
+		{0943E858-2173-4084-AFC8-C0524D8CB825} = {DFAF01BA-B1F0-405A-B906-CDEE25730BE4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6E4D88A5-830C-4A19-9FCD-098D899D8213}
