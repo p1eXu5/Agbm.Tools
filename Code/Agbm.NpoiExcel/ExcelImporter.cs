@@ -46,9 +46,13 @@ namespace Agbm.NpoiExcel
 
         public static ICollection ImportData (string fileName, Type type, int sheetIndex = 0)
         {
-            using (var stream = new FileStream (fileName, FileMode.Open, FileAccess.Read)) {
-
-                return ImportData (stream, type, sheetIndex);
+            try {
+                using ( var stream = new FileStream( fileName, FileMode.Open, FileAccess.Read ) ) {
+                    return ImportData( stream, type, sheetIndex );
+                }
+            }
+            catch ( System.IO.IOException ) {
+                return GetEmptyCollection( type );
             }
         }
 
