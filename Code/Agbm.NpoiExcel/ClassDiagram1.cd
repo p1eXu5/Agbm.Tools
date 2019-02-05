@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Agbm.NpoiExcel.ExcelImporter">
+    <Position X="5.25" Y="0.75" Width="3.5" />
+    <Members>
+      <Method Name="CheckType" Hidden="true" />
+      <Method Name="FillModelCollection" Hidden="true" />
+      <Method Name="GetSheet" Hidden="true" />
+      <Method Name="OnProgressChanged" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AABAAAAAIAABAAAAAAAIAAIAAAggAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ExcelImporter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Agbm.NpoiExcel.ProgressChangedEventArgs" Collapsed="true">
+    <Position X="3.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>ExcelImporter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
