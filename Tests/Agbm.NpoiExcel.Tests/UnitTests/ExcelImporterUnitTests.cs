@@ -16,7 +16,7 @@ namespace Agbm.NpoiExcel.Tests.UnitTests
             CultureInfo.CurrentUICulture = new CultureInfo ("en-Us", false);
         }
 
-        #region ImportData With FileName
+        #region GetSheetTable With FileName
 
         [Test]
         public void ImportData_FileNameIsNull_Throws()
@@ -83,7 +83,7 @@ namespace Agbm.NpoiExcel.Tests.UnitTests
         #endregion
 
 
-        #region ImportData With Stream
+        #region GetSheetTable With Stream
 
         [Test]
         public void ImportData_TypeIsNull_Throws()

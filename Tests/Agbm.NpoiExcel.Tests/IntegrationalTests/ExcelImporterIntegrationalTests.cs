@@ -21,7 +21,7 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
             var stream = GetExcelMemoryStream();
 
             // Action:
-            var sheetTable = ExcelImporter.ImportData (stream, 0);
+            var sheetTable = ExcelImporter.GetSheetTable (stream, 0);
 
             // Assert:
             Assert.That (sheetTable, Is.Not.Null);

@@ -16,17 +16,17 @@ namespace Agbm.NpoiExcel
 {
     public static class ExcelImporter
     {
-        #region ImportData
+        #region GetSheetTable
 
-        public static SheetTable ImportData (string fileName, int sheetIndex = 0)
+        public static SheetTable GetSheetTable (string fileName, int sheetIndex = 0)
         {
             using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
 
-                return ImportData(stream, sheetIndex);
+                return GetSheetTable(stream, sheetIndex);
             }
         }
 
-        public static SheetTable ImportData (Stream stream, int sheetIndex = 0)
+        public static SheetTable GetSheetTable (Stream stream, int sheetIndex = 0)
         {
             if (sheetIndex < 0) throw new ArgumentException("sheetIndex must be equal or greater than zero.", nameof(sheetIndex));
 
@@ -65,7 +65,7 @@ namespace Agbm.NpoiExcel
             SheetTable sheetTable;
 
             try {
-                sheetTable = ImportData (source, sheetIndex);
+                sheetTable = GetSheetTable (source, sheetIndex);
             }
             catch (ArgumentException) {
                 return GetEmptyCollection (type);

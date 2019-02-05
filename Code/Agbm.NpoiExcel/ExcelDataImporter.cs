@@ -16,7 +16,7 @@ namespace Agbm.NpoiExcel
 
         public SheetTable ImportData ( string fileName, int sheetIndex )
         {
-            return ExcelImporter.ImportData( fileName, sheetIndex );
+            return ExcelImporter.GetSheetTable( fileName, sheetIndex );
         }
 
         public IEnumerable< TOutType > GetEnumerable< TIn, TOutType > ( SheetTable sheetTable,  
