@@ -87,7 +87,9 @@ namespace Agbm.NpoiExcel
         /// <returns>Tuple of Type and Dictionary&lt; propertyName, header &gt;</returns>
         public (Type type, Dictionary< string, (string header, int column) > propertyMap) GetTypeWithMap ( SheetTable sheetTable )
         {
+
             var sheetHeaderMap = sheetTable.SheetHeaderMap.ToArray();
+            if ( sheetHeaderMap.Length == 0 ) return ((Type)null, (Dictionary< string, (string, int) >)null);
 
             foreach ( var type in _typeDictionary.OrderByDescending( t => t.Value.Count ).Select( t => t.Key ) ) {
 
@@ -99,9 +101,13 @@ namespace Agbm.NpoiExcel
                 if ( TryGetPropertyMap( sheetHeaderMap, propertyNamesMap, out var propertyToSheetMap ) ) return (type, propertyToSheetMap);
             }
 
-            return (null, null);
+            return ((Type)null, (Dictionary< string, (string, int) >)null);
         }
 
+        /// <summary>
+        /// Returns empty type property map.
+        /// </summary>
+        /// <returns></returns>
         public static Dictionary< string, (string header, int column) > GetEmptyPropertyMap () => new Dictionary< string, (string header, int column) >();
 
         /// <summary>
@@ -111,7 +117,9 @@ namespace Agbm.NpoiExcel
         /// <param name="type"></param>
         /// <param name="propertyMap"></param>
         /// <returns></returns>
-        public static bool TryGetPropertyMap ( SheetTable sheetTable, Type type, out Dictionary< string, (string header, int column) > propertyMap )
+        public static bool TryGetPropertyMap ( SheetTable sheetTable, 
+                                               Type type, 
+                                               out Dictionary< string, (string header, int column) > propertyMap )
         {
             if ( type == null ) { throw new ArgumentNullException( nameof( type ), "Type cannot be null." ); }
 
@@ -123,11 +131,18 @@ namespace Agbm.NpoiExcel
             );
 
             var sheetHeaderMap = sheetTable.SheetHeaderMap.ToArray();
+            if ( sheetHeaderMap.Length == 0 ) {
+
+                propertyMap = null;
+                return false;
+            } 
 
             return TryGetPropertyMap( sheetHeaderMap, propertyNamesMap, out propertyMap );
         }
 
-        private static bool TryGetPropertyMap ( (string header, int column)[] sheetHeaderMap, Dictionary< string[], string > propertyNamesMap, out Dictionary< string, (string header, int column) > propertyMap )
+        private static bool TryGetPropertyMap ( (string header, int column)[] sheetHeaderMap, 
+                                                Dictionary< string[], string > propertyNamesMap, 
+                                                out Dictionary< string, (string header, int column) > propertyMap )
         {
             var propertyToSheetMap = GetEmptyPropertyMap();
             var iPropertyNamesMap = propertyNamesMap.Keys.ToList();
@@ -155,5 +170,6 @@ namespace Agbm.NpoiExcel
             propertyMap = new Dictionary< string, (string header, int column) >();
             return false;
         }
+
     }
 }

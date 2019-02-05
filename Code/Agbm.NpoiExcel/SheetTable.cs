@@ -68,8 +68,8 @@ namespace Agbm.NpoiExcel
         /// <summary>
         /// Unformated excel table headers.
         /// </summary>
-        public IEnumerable<string> Headers => _sheetHeaderMap.Select( h => h.header );
-        public IEnumerable<( string header, int column )> SheetHeaderMap => _sheetHeaderMap;
+        public IEnumerable<string> Headers => _sheetHeaderMap?.Select( h => h.header ) ?? new string[0];
+        public IEnumerable<( string header, int column )> SheetHeaderMap => _sheetHeaderMap ?? (IEnumerable<( string, int )>)(new ( string, int )[0]);
         
         #endregion
 

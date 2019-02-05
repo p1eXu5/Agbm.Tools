@@ -47,21 +47,21 @@ namespace Agbm.NpoiExcel.Tests.UnitTests
         }
 
         [Test]
-        public void ImportData_FileNameConsistsOfExtensionOnly_Throws()
+        public void ImportData_FileNameConsistsOfExtensionOnly_ReturnsEmptyCollection()
         {
             var type = TypeExcelFactory.EmptyClass;
-            var ex = Assert.Catch<FileNotFoundException>(() => ExcelImporter.ImportData(".xlsx", type, 0));
+            var res = ExcelImporter.ImportData(".xlsx", type, 0);
 
-            StringAssert.Contains("Could not find file", ex.Message);
+            Assert.That( 0 == res.Count, $" res.Count: {res.Count} " );
         }
 
         [Test]
-        public void ImportData_FileDoesntExist_Throws()
+        public void ImportData_FileDoesntExist_ReturnsEmptyCollection()
         {
             var type = TypeExcelFactory.EmptyClass;
-            var ex = Assert.Catch<FileNotFoundException>(() => ExcelImporter.ImportData("notexistedfile.xlsx", type, 0));
+            var res = ExcelImporter.ImportData("notexistedfile.xlsx", type, 0);
 
-            StringAssert.Contains("Could not find file", ex.Message);
+            Assert.That( 0 == res.Count, $" res.Count: {res.Count} " );
         }
 
         [Test]

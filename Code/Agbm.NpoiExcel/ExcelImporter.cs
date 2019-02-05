@@ -20,9 +20,14 @@ namespace Agbm.NpoiExcel
 
         public static SheetTable GetSheetTable (string fileName, int sheetIndex = 0)
         {
-            using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
+            try {
+                using ( var stream = new FileStream( fileName, FileMode.Open, FileAccess.Read ) ) {
 
-                return GetSheetTable(stream, sheetIndex);
+                    return GetSheetTable( stream, sheetIndex );
+                }
+            }
+            catch ( Exception ) {
+                return new SheetTable();
             }
         }
 
