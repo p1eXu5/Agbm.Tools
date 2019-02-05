@@ -79,7 +79,7 @@ namespace Agbm.NpoiExcel
             var typeRepository = new TypeRepository();
             typeRepository.RegisterType( type, typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
 
-            var typeWithMap = typeRepository.GetTypeWithMap( sheetTable );
+            var typeWithMap = typeRepository.GetTypeAndPropertyMap( sheetTable );
 
             if (null == typeWithMap.type) {
                 return null;

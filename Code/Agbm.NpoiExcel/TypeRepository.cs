@@ -85,7 +85,7 @@ namespace Agbm.NpoiExcel
         /// </summary>
         /// <param name="sheetTable"><see cref="SheetTable"/></param>
         /// <returns>Tuple of Type and Dictionary&lt; propertyName, header &gt;</returns>
-        public (Type type, Dictionary< string, (string header, int column) > propertyMap) GetTypeWithMap ( SheetTable sheetTable )
+        public (Type type, Dictionary< string, (string header, int column) > propertyMap) GetTypeAndPropertyMap ( SheetTable sheetTable )
         {
 
             var sheetHeaderMap = sheetTable.SheetHeaderMap.ToArray();

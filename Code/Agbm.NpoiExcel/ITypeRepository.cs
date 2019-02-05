@@ -47,6 +47,6 @@ namespace Agbm.NpoiExcel
         /// </summary>
         /// <param name="sheetTable"><see cref="SheetTable"/></param>
         /// <returns>Tuple of Type and Dictionary&lt; propertyName, (header, int) &gt;</returns>
-        (Type type, Dictionary< string, (string header, int column) > propertyMap) GetTypeWithMap ( SheetTable sheetTable );
+        (Type type, Dictionary< string, (string header, int column) > propertyMap) GetTypeAndPropertyMap ( SheetTable sheetTable );
     }
 }

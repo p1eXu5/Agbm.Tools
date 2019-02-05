@@ -120,7 +120,7 @@ namespace Agbm.NpoiExcel.Tests.UnitTests
             var typeRepository = GetTypeRepository();
 
             // Action:
-            var resTuple = typeRepository.GetTypeWithMap( sheetTable );
+            var resTuple = typeRepository.GetTypeAndPropertyMap( sheetTable );
 
             // Assert:
             Assert.That( resTuple.Equals( (null, null) ) );
@@ -136,7 +136,7 @@ namespace Agbm.NpoiExcel.Tests.UnitTests
             typeRepository.RegisterType( typeof( TestType ) );
 
             // Action:
-            var resTuple = typeRepository.GetTypeWithMap( sheetTable );
+            var resTuple = typeRepository.GetTypeAndPropertyMap( sheetTable );
 
             // Assert:
             Assert.That( resTuple.Equals( (null, null) ) );
@@ -152,7 +152,7 @@ namespace Agbm.NpoiExcel.Tests.UnitTests
             typeRepository.RegisterType( testType, typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
 
             // Action:
-            var resTuple = typeRepository.GetTypeWithMap( sheetTable );
+            var resTuple = typeRepository.GetTypeAndPropertyMap( sheetTable );
 
             // Assert:
             Assert.That( testType == resTuple.type, $"Returned type is { resTuple.type?.Name ?? "null" }\n" );
@@ -170,7 +170,7 @@ namespace Agbm.NpoiExcel.Tests.UnitTests
             var sheetTable = GetMockedSheetTable( TestType.TableData );
 
             // Action:
-            var typeMap = repository.GetTypeWithMap( sheetTable );
+            var typeMap = repository.GetTypeAndPropertyMap( sheetTable );
 
             // Assert:
             Assert.That( typeMap.type.IsAssignableFrom( typeof( TestType ) ), $"It was {typeMap.type.Name}" );
@@ -185,7 +185,7 @@ namespace Agbm.NpoiExcel.Tests.UnitTests
             repository.RegisterType( typeof( TestType4 ), typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
 
             // Action:
-            var typeMap = repository.GetTypeWithMap( sheetTable );
+            var typeMap = repository.GetTypeAndPropertyMap( sheetTable );
 
             // Assert:
             Assert.That( typeMap.Equals( (null, null) ) );
