@@ -85,7 +85,7 @@ namespace Agbm.NpoiExcel
                 return null;
             }
 
-            return FillModelCollection(sheetTable, type, typeWithMap.propertyMap);
+            return GetDataFromTable(sheetTable, type, typeWithMap.propertyMap);
         }
 
         #endregion
@@ -99,11 +99,11 @@ namespace Agbm.NpoiExcel
         /// <param name="propertyMap">Dictionary&lt; propertyName, header &gt;</param>
         /// <param name="typeConverter">Type typeConverter</param>
         /// <returns></returns>
-        public static IEnumerable< TOutType > GetEnumerable< TOutType, TIn >( SheetTable sheetTable,
+        public static IEnumerable< TOutType > GetDataFromTable< TOutType, TIn >( SheetTable sheetTable,
                                                                              Dictionary< string, (string header, int column) > propertyMap,  
                                                                              ITypeConverter< TIn, TOutType > typeConverter )
         {
-            var typeCollection = FillModelCollection( sheetTable, typeof( TIn ), propertyMap );
+            var typeCollection = GetDataFromTable( sheetTable, typeof( TIn ), propertyMap );
             var typedCollection = typeCollection.Cast< TIn >().Select( typeConverter.Convert ).ToArray();
 
             return typedCollection;
@@ -115,10 +115,10 @@ namespace Agbm.NpoiExcel
         /// <typeparam name="TOut"></typeparam>
         /// <param name="sheetTable"></param>
         /// <returns></returns>
-        public static IEnumerable< TOut > GetEnumerable< TOut > ( SheetTable sheetTable )
+        public static IEnumerable< TOut > GetDataFromTable< TOut > ( SheetTable sheetTable )
         {
             if ( TypeRepository.TryGetPropertyMap( sheetTable, typeof( TOut ), out var propertyMap ) ) {
-                return FillModelCollection( sheetTable, typeof( TOut ), propertyMap ).Cast< TOut >();
+                return GetDataFromTable( sheetTable, typeof( TOut ), propertyMap ).Cast< TOut >();
             }
 
             return GetEmptyCollection( typeof( TOut ) ).Cast< TOut >();
@@ -154,7 +154,7 @@ namespace Agbm.NpoiExcel
         }
 
         [ SuppressMessage( "ReSharper", "PossibleNullReferenceException" ) ]
-        private static ICollection FillModelCollection( SheetTable sheetTable,  
+        private static ICollection GetDataFromTable( SheetTable sheetTable,  
                                                         Type type,  
                                                         Dictionary< string, (string header, int column) > headersMap )
         {
