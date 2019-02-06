@@ -16,6 +16,10 @@ namespace Agbm.NpoiExcel
 {
     public static class ExcelImporter
     {
+
+        public static event EventHandler< ProgressChangedEventArgs > ProgressChangedEvent;
+
+
         #region GetSheetTable
 
         public static SheetTable GetSheetTable (string fileName, int sheetIndex = 0)
@@ -26,7 +30,10 @@ namespace Agbm.NpoiExcel
                     return GetSheetTable( stream, sheetIndex );
                 }
             }
-            catch ( Exception ) {
+            catch ( Exception ex) {
+#if DEBUG
+                Debug.WriteLine( ex.Message );
+#endif
                 return new SheetTable();
             }
         }
@@ -85,7 +92,7 @@ namespace Agbm.NpoiExcel
                 return null;
             }
 
-            return FillModelCollection(sheetTable, type, typeWithMap.propertyMap);
+            return GetDataFromTable(sheetTable, type, typeWithMap.propertyMap);
         }
 
         #endregion
@@ -99,11 +106,11 @@ namespace Agbm.NpoiExcel
         /// <param name="propertyMap">Dictionary&lt; propertyName, header &gt;</param>
         /// <param name="typeConverter">Type typeConverter</param>
         /// <returns></returns>
-        public static IEnumerable< TOutType > GetEnumerable< TOutType, TIn >( SheetTable sheetTable,
-                                                                             Dictionary< string, (string header, int column) > propertyMap,  
-                                                                             ITypeConverter< TIn, TOutType > typeConverter )
+        public static IEnumerable< TOutType > GetDataFromTable< TOutType, TIn >( SheetTable sheetTable,
+                                                                                 Dictionary< string, (string header, int column) > propertyMap,  
+                                                                                 ITypeConverter< TIn, TOutType > typeConverter )
         {
-            var typeCollection = FillModelCollection( sheetTable, typeof( TIn ), propertyMap );
+            var typeCollection = GetDataFromTable( sheetTable, typeof( TIn ), propertyMap );
             var typedCollection = typeCollection.Cast< TIn >().Select( typeConverter.Convert ).ToArray();
 
             return typedCollection;
@@ -115,10 +122,10 @@ namespace Agbm.NpoiExcel
         /// <typeparam name="TOut"></typeparam>
         /// <param name="sheetTable"></param>
         /// <returns></returns>
-        public static IEnumerable< TOut > GetEnumerable< TOut > ( SheetTable sheetTable )
+        public static IEnumerable< TOut > GetDataFromTable< TOut > ( SheetTable sheetTable )
         {
             if ( TypeRepository.TryGetPropertyMap( sheetTable, typeof( TOut ), out var propertyMap ) ) {
-                return FillModelCollection( sheetTable, typeof( TOut ), propertyMap ).Cast< TOut >();
+                return GetDataFromTable( sheetTable, typeof( TOut ), propertyMap ).Cast< TOut >();
             }
 
             return GetEmptyCollection( typeof( TOut ) ).Cast< TOut >();
@@ -145,8 +152,9 @@ namespace Agbm.NpoiExcel
                 book = new XSSFWorkbook(stream);
             }
             catch(Exception ex) {
-
+#if DEBUG
                 Debug.WriteLine (ex.Message);
+#endif
                 book = new HSSFWorkbook(stream);
             }
 
@@ -154,7 +162,7 @@ namespace Agbm.NpoiExcel
         }
 
         [ SuppressMessage( "ReSharper", "PossibleNullReferenceException" ) ]
-        private static ICollection FillModelCollection( SheetTable sheetTable,  
+        private static ICollection GetDataFromTable( SheetTable sheetTable,  
                                                         Type type,  
                                                         Dictionary< string, (string header, int column) > headersMap )
         {
@@ -202,8 +210,6 @@ namespace Agbm.NpoiExcel
 
             return typeInstanceCollection;
         }
-
-        public static event EventHandler< ProgressChangedEventArgs > ProgressChangedEvent;
 
         private static void OnProgressChanged ( double progress )
         {

@@ -23,7 +23,7 @@ namespace Agbm.NpoiExcel
                                                                         Dictionary< string, (string header, int column) > propertyMap,  
                                                                         ITypeConverter< TIn, TOutType > typeConverter )
         {
-            return ExcelImporter.GetEnumerable( sheetTable, propertyMap, typeConverter );
+            return ExcelImporter.GetDataFromTable( sheetTable, propertyMap, typeConverter );
         }
     }
 }
