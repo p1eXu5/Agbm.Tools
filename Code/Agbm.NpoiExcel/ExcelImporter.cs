@@ -100,8 +100,8 @@ namespace Agbm.NpoiExcel
         /// <param name="typeConverter">Type typeConverter</param>
         /// <returns></returns>
         public static IEnumerable< TOutType > GetDataFromTable< TOutType, TIn >( SheetTable sheetTable,
-                                                                             Dictionary< string, (string header, int column) > propertyMap,  
-                                                                             ITypeConverter< TIn, TOutType > typeConverter )
+                                                                                 Dictionary< string, (string header, int column) > propertyMap,  
+                                                                                 ITypeConverter< TIn, TOutType > typeConverter )
         {
             var typeCollection = GetDataFromTable( sheetTable, typeof( TIn ), propertyMap );
             var typedCollection = typeCollection.Cast< TIn >().Select( typeConverter.Convert ).ToArray();
