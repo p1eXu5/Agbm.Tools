@@ -16,6 +16,10 @@ namespace Agbm.NpoiExcel
 {
     public static class ExcelImporter
     {
+
+        public static event EventHandler< ProgressChangedEventArgs > ProgressChangedEvent;
+
+
         #region GetSheetTable
 
         public static SheetTable GetSheetTable (string fileName, int sheetIndex = 0)
@@ -26,7 +30,10 @@ namespace Agbm.NpoiExcel
                     return GetSheetTable( stream, sheetIndex );
                 }
             }
-            catch ( Exception ) {
+            catch ( Exception ex) {
+#if DEBUG
+                Debug.WriteLine( ex.Message );
+#endif
                 return new SheetTable();
             }
         }
@@ -145,8 +152,9 @@ namespace Agbm.NpoiExcel
                 book = new XSSFWorkbook(stream);
             }
             catch(Exception ex) {
-
+#if DEBUG
                 Debug.WriteLine (ex.Message);
+#endif
                 book = new HSSFWorkbook(stream);
             }
 
@@ -202,8 +210,6 @@ namespace Agbm.NpoiExcel
 
             return typeInstanceCollection;
         }
-
-        public static event EventHandler< ProgressChangedEventArgs > ProgressChangedEvent;
 
         private static void OnProgressChanged ( double progress )
         {
