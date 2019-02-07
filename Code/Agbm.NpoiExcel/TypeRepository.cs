@@ -81,10 +81,10 @@ namespace Agbm.NpoiExcel
         }
 
         /// <summary>
-        /// Returns tuple of Type and Dictionary&lt; propertyName, header &gt;
+        /// Returns <see cref="Tuple{T1,T2}"/>&lt; <see cref="Type"/>,<see cref="Dictionary{TKey,TValue}"/>&lt;propertes,(header, column Num) &gt;&gt;
         /// </summary>
         /// <param name="sheetTable"><see cref="SheetTable"/></param>
-        /// <returns>Tuple of Type and Dictionary&lt; propertyName, header &gt;</returns>
+        /// <returns><see cref="Tuple{T1,T2}"/>&lt; <see cref="Type"/>,<see cref="Dictionary{TKey,TValue}"/>&lt;propertes,(header, column Num) &gt;&gt;</returns>
         public (Type type, Dictionary< string, (string header, int column) > propertyMap) GetTypeAndPropertyMap ( SheetTable sheetTable )
         {
 
