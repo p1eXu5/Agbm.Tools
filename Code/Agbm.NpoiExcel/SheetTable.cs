@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices;
 using NPOI.SS.UserModel;
 
 namespace Agbm.NpoiExcel
@@ -190,6 +188,7 @@ namespace Agbm.NpoiExcel
         /// </summary>
         /// <param name="sheet"></param>
         /// <param name="maxColumn"></param>
+        /// <param name="lastRow"></param>
         /// <returns></returns>
         private static CellPoint FindEndCell(ISheet sheet, short maxColumn, int lastRow )
         {

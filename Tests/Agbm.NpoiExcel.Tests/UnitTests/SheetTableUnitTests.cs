@@ -4,6 +4,8 @@ using System.Linq;
 using Agbm.NpoiExcel.Tests.Factory;
 using NPOI.SS.UserModel;
 using NUnit.Framework;
+// ReSharper disable ObjectCreationAsStatement
+// ReSharper disable UnusedVariable
 
 namespace Agbm.NpoiExcel.Tests.UnitTests
 {
@@ -19,6 +21,7 @@ namespace Agbm.NpoiExcel.Tests.UnitTests
         [Test]
         public void Ctor_SheetIsNull_Throws()
         {
+            // ReSharper disable once ObjectCreationAsStatement
             var ex = Assert.Catch<ArgumentNullException> (() => new SheetTable (null));
 
             StringAssert.Contains ("sheet can't be null", ex.Message);
@@ -87,6 +90,7 @@ namespace Agbm.NpoiExcel.Tests.UnitTests
         public void Indexer_SheetTableContainsOnlyHeaders_Throws()
         {
             // Arrange:
+            // ReSharper disable once ConstantConditionalAccessQualifier
             var sheet = MockedSheetFactory.HeaderTestCases (5, 5).Cast<TestCaseData>().Where (tc => tc.TestName.Contains ("#8"))?.First().Arguments[0] as ISheet;
             var sheetTable = new SheetTable(sheet);
 
