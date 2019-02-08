@@ -189,8 +189,14 @@ namespace Agbm.NpoiExcel
                     if ( propertyType == typeof( int ) ) {
                         type.GetProperty( propertyName ).SetValue( typeInstance, (int)cell );
                     }
+                    else if ( propertyType == typeof( int? ) ) {
+                        type.GetProperty( propertyName ).SetValue( typeInstance, ( int? )cell );
+                    }
                     else if ( propertyType == typeof( double ) ) {
                         type.GetProperty( propertyName ).SetValue( typeInstance, ( double )cell );
+                    }
+                    else if ( propertyType == typeof( double? ) ) {
+                        type.GetProperty( propertyName ).SetValue( typeInstance, ( double? )cell );
                     }
                     else if ( propertyType == typeof( string ) ) {
                         type.GetProperty( propertyName ).SetValue( typeInstance, ( string )cell );
@@ -198,8 +204,14 @@ namespace Agbm.NpoiExcel
                     else if ( propertyType == typeof( bool ) ) {
                         type.GetProperty( propertyName ).SetValue( typeInstance, ( bool )cell );
                     }
+                    else if ( propertyType == typeof( bool? ) ) {
+                        type.GetProperty( propertyName ).SetValue( typeInstance, ( bool? )cell );
+                    }
                     else if ( propertyType == typeof( DateTime ) ) {
                         type.GetProperty( propertyName ).SetValue( typeInstance, ( DateTime )cell );
+                    }
+                    else if ( propertyType == typeof( DateTime? ) ) {
+                        type.GetProperty( propertyName ).SetValue( typeInstance, ( DateTime? )cell );
                     }
                 }
 

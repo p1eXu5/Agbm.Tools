@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Moq;
 using NPOI.SS.UserModel;
@@ -340,7 +341,7 @@ namespace Agbm.NpoiExcel.Tests.Factory
                 }
             }
 
-            return GetSheetMock( rowsMap );
+            return GetMockedSheet( rowsMap );
         }
 
         public static ISheet GetMockedSheet ( string[,] tableData )
@@ -356,56 +357,76 @@ namespace Agbm.NpoiExcel.Tests.Factory
                 rowsMap[ i ] = columnMap;
             }
 
-            return GetSheetMock( rowsMap, tableData );
+            return GetMockedSheet( rowsMap, tableData );
         }
 
-        private static ISheet GetSheetMock ( Dictionary< int, HashSet< int > > rowsMap, string[,] data )
+        public static ISheet GetMockedSheet ( Type inType, ITypeRepository typeRepo, object[] data )
+        {
+            var cellMap = new Dictionary< int, HashSet< int > >();
+            var properties = typeRepo.GetPropertyNames( inType ).ToArray();
+            var columnCount = properties.Length;
+
+            // headers ar random row
+            cellMap[ 113 ] = new HashSet< int >( Enumerable.Range( 11, columnCount ) );
+            cellMap[ 114 ] = new HashSet< int >( Enumerable.Range( 11, columnCount ) );
+
+            object[,] cellData = new object[ 2, columnCount ];
+
+            // load headers
+            for ( int i = 0; i < columnCount; i++ ) {
+                cellData[ 0, i ] = properties[ i ];
+                cellData[ 1, i ] = data[ i ];
+            }
+
+            return GetMockedSheet( cellMap, cellData );
+        }
+
+        /// <summary>
+        /// Creates mocked sheet from cell map ( [rowNum] = columnSet ) and cell data.
+        /// </summary>
+        /// <param name="cellMap"><see cref="Dictionary{TKey,TValue}"/></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private static ISheet GetMockedSheet ( Dictionary< int, HashSet< int > > cellMap, object[,] data )
         {
             // см. типы передаваемых параметров, а не возвращаемых!
             var sheetMock = new Mock< ISheet >();
+            var firstRow = cellMap.Keys.Min();
+            var lastRow = cellMap.Keys.Max();
+            var firstColumn = cellMap[ firstRow ].Min();
 
-            sheetMock.Setup( s => s.FirstRowNum ).Returns( rowsMap.Keys.Min() );
-            sheetMock.Setup( s => s.LastRowNum ).Returns( rowsMap.Keys.Max() );
+            sheetMock.Setup( s => s.FirstRowNum ).Returns( firstRow );
+            sheetMock.Setup( s => s.LastRowNum ).Returns( lastRow );
 
-            sheetMock.Setup( s => s.GetRow( It.Is< int >( r => rowsMap.Keys.Contains( r ) ) ) )
+            sheetMock.Setup( s => s.GetRow( It.Is< int >( r => cellMap.Keys.Contains( r ) ) ) )
                      .Returns( ( int r ) =>
                                {
                                    var rowMock = new Mock< IRow >();
-                                   rowMock.Setup( s => s.FirstCellNum ).Returns( ( short )rowsMap[ r ].Min() );
-                                   rowMock.Setup( s => s.LastCellNum ).Returns( ( short )(rowsMap[ r ].Max() + 1) );
-                                   rowMock.Setup( row => row.GetCell( It.Is< int >( c => rowsMap[ r ].Contains( c ) ) ) )
-                                          .Returns( ( int c ) => ReturnMockedStringCell( data, r, c ) );
+                                   rowMock.Setup( s => s.FirstCellNum ).Returns( ( short )cellMap[ r ].Min() );
+                                   rowMock.Setup( s => s.LastCellNum ).Returns( ( short )(cellMap[ r ].Max() + 1) );
+                                   rowMock.Setup( row => row.GetCell( It.Is< int >( c => cellMap[ r ].Contains( c ) ) ) )
+                                          .Returns( ( int c ) => GetMockedCell( data, r - firstRow, c - firstColumn ) );
                                    return rowMock.Object;
                                } );
 
             return sheetMock.Object;
         }
 
-        private static ICell ReturnMockedStringCell ( string[,] data, int row, int column )
-        {
-            var stringCellMock = new Mock<ICell>();
-
-            stringCellMock.Setup( c => c.CellType ).Returns( CellType.String );
-            stringCellMock.Setup( c => c.StringCellValue ).Returns( data[ row, column ] );
-
-            return stringCellMock.Object;
-        }
-
-        private static ISheet GetSheetMock ( Dictionary< int, HashSet< int > > rowsMap )
+        private static ISheet GetMockedSheet ( Dictionary< int, HashSet< int > > cellMap )
         {
             // см. типы передаваемых параметров, а не возвращаемых!
             var sheetMock = new Mock< ISheet >();
 
-            sheetMock.Setup( s => s.FirstRowNum ).Returns( rowsMap.Keys.Min() );
-            sheetMock.Setup( s => s.LastRowNum ).Returns( rowsMap.Keys.Max() );
+            sheetMock.Setup( s => s.FirstRowNum ).Returns( cellMap.Keys.Min() );
+            sheetMock.Setup( s => s.LastRowNum ).Returns( cellMap.Keys.Max() );
 
-            sheetMock.Setup( s => s.GetRow( It.Is< int >( r => rowsMap.Keys.Contains( r ) ) ) )
+            sheetMock.Setup( s => s.GetRow( It.Is< int >( r => cellMap.Keys.Contains( r ) ) ) )
                      .Returns( ( int r ) =>
                                {
                                    var rowMock = new Mock< IRow >();
-                                   rowMock.Setup( s => s.FirstCellNum ).Returns( ( short )rowsMap[ r ].Min() );
-                                   rowMock.Setup( s => s.LastCellNum ).Returns( ( short )(rowsMap[ r ].Max() + 1) );
-                                   rowMock.Setup( row => row.GetCell( It.Is< int >( c => rowsMap[ r ].Contains( c ) ) ) )
+                                   rowMock.Setup( s => s.FirstCellNum ).Returns( ( short )cellMap[ r ].Min() );
+                                   rowMock.Setup( s => s.LastCellNum ).Returns( ( short )(cellMap[ r ].Max() + 1) );
+                                   rowMock.Setup( row => row.GetCell( It.Is< int >( c => cellMap[ r ].Contains( c ) ) ) )
                                           .Returns( ReturnMockedStringCell() );
                                    return rowMock.Object;
                                } );
@@ -413,6 +434,50 @@ namespace Agbm.NpoiExcel.Tests.Factory
             return sheetMock.Object;
         }
 
+        private static ICell GetMockedCell ( object[,] data, int row, int column )
+        {
+            return GetMockedCell( (dynamic)data[ row, column ] );
+        }
+
+        private static ICell GetMockedCell ( object value )
+        {
+            var stringCellMock = new Mock<ICell>();
+
+            stringCellMock.Setup( c => c.CellType ).Returns( CellType.String );
+            stringCellMock.Setup( c => c.StringCellValue ).Returns( value.ToString() );
+
+            return stringCellMock.Object;
+        }
+
+        private static ICell GetMockedCell ( string value )
+        {
+            var stringCellMock = new Mock<ICell>();
+
+            stringCellMock.Setup( c => c.CellType ).Returns( CellType.String );
+            stringCellMock.Setup( c => c.StringCellValue ).Returns( value );
+
+            return stringCellMock.Object;
+        }
+
+        private static ICell GetMockedCell ( double value )
+        {
+            var stringCellMock = new Mock<ICell>();
+
+            stringCellMock.Setup( c => c.CellType ).Returns( CellType.Numeric );
+            stringCellMock.Setup( c => c.NumericCellValue ).Returns( value );
+
+            return stringCellMock.Object;
+        }
+
+        private static ICell GetMockedCell ( bool value )
+        {
+            var stringCellMock = new Mock<ICell>();
+
+            stringCellMock.Setup( c => c.CellType ).Returns( CellType.Boolean );
+            stringCellMock.Setup( c => c.BooleanCellValue ).Returns( value );
+
+            return stringCellMock.Object;
+        }
 
         private static ICell ReturnMockedStringCell ()
         {

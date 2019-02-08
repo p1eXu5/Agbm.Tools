@@ -95,7 +95,6 @@ namespace Agbm.NpoiExcel
 
         private static (short minColumn, short maxColumn, int lastRow) GetBound(ISheet sheet)
         {
-            short minColumn = 0;
             int lastRowCounter = sheet.LastRowNum;
             int lastRow = -1;
 
@@ -104,9 +103,11 @@ namespace Agbm.NpoiExcel
                 maxColumn = sheet.GetRow( lastRowCounter-- )?.LastCellNum ?? -1;
                 if ( lastRow < 0 && maxColumn >= 0 ) lastRow = lastRowCounter + 1;
 
-            } while ( (maxColumn < 0 && lastRowCounter > 0) || maxColumn < minColumn );
+            } while ( (maxColumn < 0 && lastRowCounter > 0) || maxColumn < 0 );
 
-            if ( maxColumn < minColumn ) throw new Exception( " maxColumn < minColumn " );
+            if ( maxColumn < 0 ) throw new Exception( " maxColumn < minColumn " );
+
+            short minColumn = short.MaxValue;
 
             for (int i = sheet.FirstRowNum; i <= lastRow; i++) {
 
@@ -186,6 +187,7 @@ namespace Agbm.NpoiExcel
         {
             int row = lastRow;
             short column = maxColumn;
+            --column;
 
             while (sheet.GetRow(row)?.GetCell(column) == null
                    || sheet.GetRow(row).GetCell(column).CellType == CellType.Blank) {
