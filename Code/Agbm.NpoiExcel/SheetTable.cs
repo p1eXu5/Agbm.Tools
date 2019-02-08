@@ -95,6 +95,14 @@ namespace Agbm.NpoiExcel
 
         private static (short minColumn, short maxColumn, int lastRow) GetBound(ISheet sheet)
         {
+            if ( sheet.LastRowNum == sheet.FirstRowNum ) {
+                var row = sheet.GetRow( sheet.FirstRowNum );
+                if ( row == null || (row.FirstCellNum == row.LastCellNum && row.GetCell( row.FirstCellNum ) == null) ) {
+
+                    throw new ArgumentException( "sheet has no data", nameof( sheet ));
+                }
+            }
+
             int lastRowCounter = sheet.LastRowNum;
             int lastRow = -1;
 
