@@ -15,12 +15,17 @@ namespace Agbm.NpoiExcel
     {
         public const int DAY_COUNT_NEGATIVE_VARIANCE = -693_595;
         public const int DAY_COUNT_POSITIVE_VARIANCE = 2_899_999;
+        public const string NULL_STRING = "NULL";
 
         private readonly ICell _cell;
 
         private readonly string _stringValue;
         private double _doubleValue;
         private DateTime _dateTimeValue;
+
+
+
+        #region Ctor
 
         public CellValue (ICell cell)
         {
@@ -29,6 +34,10 @@ namespace Agbm.NpoiExcel
             _doubleValue = default( double );
             _dateTimeValue = default( DateTime );
         }
+
+        #endregion
+
+
 
         public double GetDoubleValue ()
         {
@@ -82,6 +91,12 @@ namespace Agbm.NpoiExcel
             return _doubleValue;
         }
 
+        public double? GetNullableDoubleValue ()
+        {
+            if ( IsNullCell() ) return null;
+            return GetDoubleValue();
+        }
+
         public int GetIntValue ()
         {
             var doubleValue = GetDoubleValue();
@@ -89,6 +104,12 @@ namespace Agbm.NpoiExcel
             if ( doubleValue > int.MaxValue ) return int.MaxValue;
             if ( doubleValue < int.MinValue ) return int.MinValue;
             return Convert.ToInt32( doubleValue );
+        }
+
+        public int? GetNullableIntValue ()
+        {
+            if ( IsNullCell() ) return null;
+            return GetIntValue();
         }
 
         public bool GetBoolValue ()
@@ -103,6 +124,12 @@ namespace Agbm.NpoiExcel
             }
 
             return true;
+        }
+
+        public bool? GetNullableBoolValue ()
+        {
+            if ( IsNullCell() ) return null;
+            return GetBoolValue();
         }
 
         public string GetStringValue ()
@@ -135,15 +162,31 @@ namespace Agbm.NpoiExcel
             return _dateTimeValue;
         }
 
+        public DateTime? GetNullableDateTimeValue ()
+        {
+            if ( IsNullCell() ) return null;
+            return GetDateTimeValue();
+        }
+
 
         public static implicit operator int (CellValue value)
         {
             return value.GetIntValue();
         }
 
+        public static implicit operator int? (CellValue value)
+        {
+            return value.GetNullableIntValue();
+        }
+
         public static implicit operator double (CellValue value)
         {
             return value.GetDoubleValue();
+        }
+
+        public static implicit operator double? (CellValue value)
+        {
+            return value.GetNullableDoubleValue();
         }
 
         public static implicit operator string (CellValue value)
@@ -156,10 +199,21 @@ namespace Agbm.NpoiExcel
             return value.GetBoolValue();
         }
 
+        public static implicit operator bool? (CellValue value)
+        {
+            return value.GetNullableBoolValue();
+        }
+
         public static implicit operator DateTime (CellValue value)
         {
             return value.GetDateTimeValue();
         }
+
+        public static implicit operator DateTime? (CellValue value)
+        {
+            return value.GetNullableDateTimeValue();
+        }
+
 
         public override string ToString()
         {
@@ -180,6 +234,20 @@ namespace Agbm.NpoiExcel
         public override int GetHashCode()
         {
             return _stringValue.GetHashCode();
+        }
+
+
+        private bool IsNullCell ()
+        {
+            if ( _cell == null ) return true;
+
+            var stringValue = GetStringValue()?.Trim();
+            if ( string.IsNullOrEmpty( stringValue )
+                 || stringValue.ToUpperInvariant().Equals( NULL_STRING )) {
+                return true;
+            }
+
+            return false;
         }
     }
 

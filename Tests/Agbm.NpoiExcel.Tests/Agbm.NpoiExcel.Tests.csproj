@@ -86,6 +86,8 @@
     <Compile Include="Factory\MockedSheetFactory.cs" />
     <Compile Include="Factory\StreamFactory.cs" />
     <Compile Include="Factory\TypeExcelFactory.cs" />
+    <Compile Include="IntegrationalTests\Cases\DoubleCases.cs" />
+    <Compile Include="IntegrationalTests\Cases\IntCases.cs" />
     <Compile Include="IntegrationalTests\ExcelExporterTests.cs" />
     <Compile Include="IntegrationalTests\ExcelImporterIntegrationalTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

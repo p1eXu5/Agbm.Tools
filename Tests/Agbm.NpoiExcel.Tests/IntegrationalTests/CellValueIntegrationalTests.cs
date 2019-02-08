@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Agbm.NpoiExcel.Tests.IntegrationalTests.Cases;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
@@ -19,7 +20,7 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
         #region IntImplicit
 
         [Test]
-        public void IntImplicit_ICellIsNull_ReturnsDefaultValue()
+        public void IntImplicit_NullCell_ReturnsDefaultValue()
         {
             // Arrange:
             var cellValue = new CellValue(null);
@@ -31,10 +32,8 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
             Assert.That (default(int) == intValue);
         }
 
-        [TestCase (0.0, 0)]
-        [TestCase (-9876543.0123456789, -9876543)]
-        [TestCase (9876543.0123456789, 9876543)]
-        public void IntImplicit_ICellIsNumeric_ReturnsValue(double value, int expected)
+        [ TestCaseSource( typeof(IntCases), "NumericCell") ]
+        public void IntImplicit_NumericCell_ReturnsValue ( double value, int expected )
         {
             // Arrange:
             var cellValue = new CellValue(GetNumericCell(value));
@@ -46,18 +45,8 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
             Assert.That (expected == intValue);
         }
         
-        [TestCase ("0.0", 0)]
-        [TestCase ("0", 0)]
-        [TestCase (" -9876543.0123456789", -9876543)]
-        [TestCase ("9876543.0123456789 ", 9876543)]
-        [TestCase (" 9876543", 9876543)]
-        [TestCase ("-9876543 ", -9876543)]
-        [TestCase ("Да", 1)]
-        [TestCase ("да", 1)]
-        [TestCase ("дА", 1)]
-        [TestCase ("ДА", 1)]
-        [TestCase ("Yes", 1)]
-        public void IntImplicit_CellIsNumericOrTrueString_ReturnsValue(string value, int expected)
+        [ TestCaseSource( typeof(IntCases), "NumericStringCell") ]
+        public void IntImplicit_NumericStringCell_ReturnsExpected ( string value, int expected )
         {
             // Arrange:
             var cellValue = new CellValue(GetStringCell(value));
@@ -69,16 +58,21 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
             Assert.That (expected == actual);
         }
 
-        [TestCase ("d0.0")]
-        [TestCase ("r0")]
-        [TestCase ("-9876543.012+3456789")]
-        [TestCase ("9876543.01 23456789")]
-        [TestCase ("d9876543")]
-        [TestCase ("-987/6543")]
-        [TestCase ("No")]
-        [TestCase ("nO")]
-        [TestCase ("Нет")]
-        public void IntImplicit_CellIsString_ReturnsDefaultValue(string value)
+        [ TestCaseSource( typeof(IntCases), "BooleanStringCell") ]
+        public void IntImplicit_BooleanStringCell_ReturnsExpected ( string value, int expected )
+        {
+            // Arrange:
+            var cellValue = new CellValue(GetStringCell(value));
+
+            // Action:
+            int actual = cellValue;
+
+            // Assert:
+            Assert.That (expected == actual);
+        }
+
+        [ TestCaseSource( typeof(IntCases), "StringCell") ]
+        public void IntImplicit_StringCell_ReturnsExpected ( string value )
         {
             // Arrange:
             var cellValue = new CellValue(GetStringCell(value));
@@ -91,7 +85,7 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
         }
 
         [TestCase (true)]
-        public void IntImplicit_CellIsTrue_ReturnsOne(bool value)
+        public void IntImplicit_CellIsTrue_ReturnsOne ( bool value )
         {
             // Arrange:
             var cellValue = new CellValue(GetBooleanCell(value));
@@ -104,7 +98,7 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
         }
 
         [TestCase (false)]
-        public void IntImplicit_CellIsFalse_ReturnsZero(bool value)
+        public void IntImplicit_CellIsFalse_ReturnsZero ( bool value )
         {
             // Arrange:
             var cellValue = new CellValue(GetBooleanCell(value));
@@ -116,11 +110,8 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
             Assert.That (0 == actual);
         }
 
-        [TestCase ("11.12.2015", 42349)]
-        [TestCase ("01.01.1900", 1)]
-        [TestCase ("25.07.2541 0:34:12", 234328)]
-        [TestCase ("13.03.1346", -1)]
-        public void IntImplicit_CellIsDateTime_ReturnsExpectedValue(string value, int expected)
+        [ TestCaseSource( typeof(IntCases), "DateTimeCell") ]
+        public void IntImplicit_DateTimeCell_ReturnsExpected ( string value, int expected )
         {
             // Arrange:
             var cellValue = new CellValue(GetDefaultCell(DateTime.Parse (value)));
@@ -131,6 +122,51 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
             // Assert:
             Assert.That (expected == actual);
         }
+
+        #endregion
+
+
+        #region NullableInt
+
+        [Test]
+        public void NullableIntImplicit_NullCell_ReturnsDefaultValue()
+        {
+            // Arrange:
+            var cellValue = new CellValue( null );
+
+            // Action:
+            int? intValue = cellValue;
+
+            // Assert:
+            Assert.That ( default(int? ) == intValue );
+        }
+
+        [ TestCaseSource( typeof(IntCases), "NullableString") ]
+        public void NullableIntImplicit_NullableStringCell_ReturnsNull ( string value )
+        {
+            // Arrange:
+            var cellValue = new CellValue( GetStringCell( value ) );
+
+            // Action:
+            int? actual = cellValue;
+
+            // Assert:
+            Assert.That ( default( int? ) == actual, $"actual == { actual }" );
+        }
+
+        [ TestCaseSource( typeof(IntCases), "NumericStringCell") ]
+        public void NullableIntImplicit_NumericStringCell_ReturnsExpected ( string value, int? expected )
+        {
+            // Arrange:
+            var cellValue = new CellValue( GetStringCell( value ) );
+
+            // Action:
+            int? actual = cellValue;
+
+            // Assert:
+            Assert.That ( expected == actual );
+        }
+
 
         #endregion
 
@@ -250,6 +286,51 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
             // Assert:
             Assert.That (actual, Is.EqualTo (expected));
         }
+
+        #endregion
+
+
+        #region NullableInt
+
+        [Test]
+        public void NullableDoubleImplicit_NullCell_ReturnsDefaultValue()
+        {
+            // Arrange:
+            var cellValue = new CellValue( null );
+
+            // Action:
+            double? value = cellValue;
+
+            // Assert:
+            Assert.That ( value.Equals( default( double? ) ) );
+        }
+
+        [ TestCaseSource( typeof( IntCases ), "NullableString") ]
+        public void NullableDoubleImplicit_NullableStringCell_ReturnsNull ( string value )
+        {
+            // Arrange:
+            var cellValue = new CellValue( GetStringCell( value ) );
+
+            // Action:
+            double? actual = cellValue;
+
+            // Assert:
+            Assert.That ( actual.Equals( default( double? ) ), $"actual == { actual }" );
+        }
+
+        [ TestCaseSource( typeof( DoubleCases ), "NumericStringCell") ]
+        public void NullableDoubleImplicit_NumericStringCell_ReturnsExpected ( string value, double? expected )
+        {
+            // Arrange:
+            var cellValue = new CellValue( GetStringCell( value ) );
+
+            // Action:
+            double? actual = cellValue;
+
+            // Assert:
+            Assert.That ( actual.Equals( expected ) );
+        }
+
 
         #endregion
 
