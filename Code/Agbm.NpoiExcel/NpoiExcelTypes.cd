@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Agbm.NpoiExcel.ExcelImporter">
+    <Position X="4" Y="2" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>ABBAAAAAIAABAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ExcelImporter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Agbm.NpoiExcel.ProgressChangedEventArgs" Collapsed="true">
+    <Position X="9.25" Y="2" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>ExcelImporter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="Agbm.NpoiExcel.SheetTable">
+    <Position X="0.5" Y="2" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAiAAAAAABSAEACIAABCACIAAAEiI=</HashCode>
+      <FileName>SheetTable.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Agbm.NpoiExcel.CellValue">
+    <Position X="10.25" Y="3.75" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAACOACAIABAAAAFgAQABEAAAgAARIAAAABAAAAAIAA=</HashCode>
+      <FileName>CellValue.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

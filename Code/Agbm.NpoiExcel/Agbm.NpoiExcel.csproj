@@ -78,7 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="ClassDiagram1.cd" />
+    <None Include="NpoiExcelTypes.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
