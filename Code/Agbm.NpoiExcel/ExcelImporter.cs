@@ -24,18 +24,11 @@ namespace Agbm.NpoiExcel
 
         public static SheetTable GetSheetTable (string fileName, int sheetIndex = 0)
         {
-            try {
-                using ( var stream = new FileStream( fileName, FileMode.Open, FileAccess.Read ) ) {
+            using ( var stream = new FileStream( fileName, FileMode.Open, FileAccess.Read ) ) {
 
-                    return GetSheetTable( stream, sheetIndex );
-                }
+                return GetSheetTable( stream, sheetIndex );
             }
-            catch ( Exception ex) {
-#if DEBUG
-                Debug.WriteLine( ex.Message );
-#endif
-                return new SheetTable();
-            }
+
         }
 
         public static SheetTable GetSheetTable (Stream stream, int sheetIndex = 0)
@@ -48,11 +41,11 @@ namespace Agbm.NpoiExcel
             try {
                 sheet = GetSheet(stream, sheetIndex);
             }
-            catch {
-                throw new FileFormatException($"{stream} has invalid data format or has no sheetTable with {sheetIndex} index.");
+            catch ( Exception ex ) {
+                return new SheetTable();
             }
 
-            return new SheetTable(sheet);
+            return new SheetTable( sheet );
         }
 
 
@@ -149,7 +142,7 @@ namespace Agbm.NpoiExcel
             IWorkbook book;
 
             try { 
-                book = new XSSFWorkbook(stream);
+                book = new XSSFWorkbook( stream );
             }
             catch(Exception ex) {
 #if DEBUG
