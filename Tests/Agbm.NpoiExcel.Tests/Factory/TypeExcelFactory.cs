@@ -7,11 +7,12 @@ namespace Agbm.NpoiExcel.Tests.Factory
         public static Type EmptyClass => typeof (Empty);
         public static Type ClassWithParameterizedCtor => typeof (ParameterizedCtor);
 
-        class Empty { }
 
         class ParameterizedCtor
         {
             public ParameterizedCtor (int foo) { }
         }
     }
+
+    public class Empty { }
 }

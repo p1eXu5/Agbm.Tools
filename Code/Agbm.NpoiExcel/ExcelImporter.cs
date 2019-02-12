@@ -33,7 +33,7 @@ namespace Agbm.NpoiExcel
 
         public static SheetTable GetSheetTable (Stream stream, int sheetIndex = 0)
         {
-            if (sheetIndex < 0) throw new ArgumentException("sheetIndex must be equal or greater than zero.", nameof(sheetIndex));
+            if (sheetIndex < 0) throw new ArgumentOutOfRangeException( nameof( sheetIndex ), "sheetIndex must be equal or greater than zero." );
 
             // Load sheetTable:
             ISheet sheet;
@@ -48,16 +48,21 @@ namespace Agbm.NpoiExcel
             return new SheetTable( sheet );
         }
 
-
+        /// <summary>
+        /// Import data from file to collection.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="type"></param>
+        /// <param name="sheetIndex"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"/>
+        /// <exception cref="FileNotFoundException"/>
+        /// <exception cref="DirectoryNotFoundException"/>
+        /// <exception cref="ArgumentOutOfRangeException"/>
         public static ICollection ImportData (string fileName, Type type, int sheetIndex = 0)
         {
-            try {
-                using ( var stream = new FileStream( fileName, FileMode.Open, FileAccess.Read ) ) {
-                    return ImportData( stream, type, sheetIndex );
-                }
-            }
-            catch ( System.IO.IOException ) {
-                return GetEmptyCollection( type );
+            using ( var stream = new FileStream( fileName, FileMode.Open, FileAccess.Read ) ) {
+                return ImportData( stream, type, sheetIndex );
             }
         }
 
@@ -65,16 +70,18 @@ namespace Agbm.NpoiExcel
         {
             if ( source == null ) throw new ArgumentNullException( nameof( source ), "Source cannot be null." );
             if ( type == null ) throw new ArgumentNullException( nameof( type ), "Type cannot be null." );
-            if ( sheetIndex < 0 ) throw new ArgumentException( "Index of sheet cannot be less than zero.", nameof( sheetIndex ) );
+            if ( sheetIndex < 0 ) throw new ArgumentOutOfRangeException( nameof( sheetIndex), "Index of sheet cannot be less than zero." );
 
             SheetTable sheetTable;
 
             try {
                 sheetTable = GetSheetTable (source, sheetIndex);
             }
-            catch (ArgumentException) {
+            catch ( ArgumentOutOfRangeException ) {
                 return GetEmptyCollection (type);
             }
+
+            if ( sheetTable.ColumnCount == 0 ) return GetEmptyCollection (type);
 
             var typeRepository = new TypeRepository();
             typeRepository.RegisterType( type, typeof( HeaderAttribute ), typeof( HiddenAttribute ) );

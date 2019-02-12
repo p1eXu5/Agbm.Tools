@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using Agbm.Helpers.Extensions;
 using Agbm.NpoiExcel.Tests.Factory;
 using NUnit.Framework;
@@ -50,22 +51,18 @@ namespace Agbm.NpoiExcel.Tests.UnitTests
         public void ImportData_FileNameConsistsOfExtensionOnly_ReturnsEmptyCollection()
         {
             var type = TypeExcelFactory.EmptyClass;
-            var res = ExcelImporter.ImportData(".xlsx", type, 0);
-
-            Assert.That( 0 == res.Count, $" res.Count: {res.Count} " );
+            Assert.Catch<FileNotFoundException>(  () => ExcelImporter.ImportData(".xlsx", type, 0) );
         }
 
         [Test]
-        public void ImportData_FileDoesntExist_ReturnsEmptyCollection()
+        public void ImportData_FileDoesntExist_Throw()
         {
             var type = TypeExcelFactory.EmptyClass;
-            var res = ExcelImporter.ImportData("notexistedfile.xlsx", type, 0);
-
-            Assert.That( 0 == res.Count, $" res.Count: {res.Count} " );
+            Assert.Catch<FileNotFoundException>(  () => ExcelImporter.ImportData("notexistedfile.xlsx", type, 0));
         }
 
         [Test]
-        public void ImportData_FileDoesNotContainExcelData_Throws()
+        public void ImportData_FileDoesNotContainExcelData_ReturnsEmptyCollection()
         {
             var file = "test.txt".AppendAssemblyPath();
 
@@ -73,9 +70,9 @@ namespace Agbm.NpoiExcel.Tests.UnitTests
             stream.Close();
 
             var type = TypeExcelFactory.EmptyClass;
-            var ex = Assert.Catch<FileFormatException>(() => ExcelImporter.ImportData(file, type, 0));
+            var res = ExcelImporter.ImportData(file, type, 0).Cast< Empty >();
 
-            StringAssert.Contains("has invalid data format or has no sheetTable with 0 index.", ex.Message);
+            Assert.That( res, Is.Empty );
 
             File.Delete (file);
         }
@@ -115,13 +112,14 @@ namespace Agbm.NpoiExcel.Tests.UnitTests
         }
 
         [Test]
-        public void ImportData_StreamDoesNotContainExcelData_Throws()
+        public void ImportData_StreamDoesNotContainExcelData_ReturnsEmptyCollection()
         {
             var type = TypeExcelFactory.EmptyClass;
             var stream = new MemoryStream(new byte[1]);
-            var ex = Assert.Catch<FileFormatException>(() => ExcelImporter.ImportData(stream, type, 0));
+            var res = ExcelImporter.ImportData(stream, type, 0).Cast< Empty >();
 
-            StringAssert.Contains("has invalid data format or has no sheetTable with 0 index.", ex.Message);
+            stream.Close();
+            Assert.That( res, Is.Empty );
         }
 
         #endregion

@@ -3,6 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Agbm.Helpers.Extensions;
+using Agbm.NpoiExcel.Attributes;
 using Agbm.NpoiExcel.Tests.Factory;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
@@ -34,7 +36,25 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
             Assert.That( sheetTable, Is.Not.Null );
         }
 
+        [ Test ]
+        public void ImportData_XlsxFile_CanRead ()
+        {
+            var file = "test.xlsx".AppendAssemblyPath( "TestFiles" );
 
+            var res = ExcelImporter.ImportData( file, typeof( ImportedFileClass ) ).Cast< ImportedFileClass >();
+
+            Assert.That( res, Is.Not.Empty );
+        }
+
+        [ Test ]
+        public void ImportData_XlsFile_CanRead ()
+        {
+            var file = "test.xls".AppendAssemblyPath( "TestFiles" );
+
+            var res = ExcelImporter.ImportData( file, typeof( ImportedFileClass ) ).Cast< ImportedFileClass >();
+
+            Assert.That( res, Is.Not.Empty );
+        }
 
         [ Test ]
         public void GetDataFromTable_ComplexTInt_RetutnsExpected ()
@@ -157,6 +177,32 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
             {
                 return obj;
             }
+        }
+
+        class ImportedFileClass
+        {
+            [Header( "Код товара" )]        public int Id { get; set; }
+            [Header( "Номенклатура" )]      public string Name { get; set; }
+
+            [Header( "Колво в коробке" )]   public int? CartonQuantity { get; set; }
+
+            [Header( "Вес ед" )]            public double? ItemWeight { get; set; }
+
+            [Header( "Длина коробки" )]
+            [Header( "ДлинаКоробки_см" )]
+                                            public double? CartonLength { get; set; }
+
+            [Header( "Ширина коробки" )]
+            [Header( "ШиринаКоробки_см" )]
+                                            public double? CartonWidth { get; set; }
+
+            [Header( "Высота коробки" )]
+            [Header( "ВысотаКоробки_см" )]
+                                            public double? CartonHeight { get; set; }
+
+            [Header( "ДлинаЕд_см" )]         public double? ItemLength { get; set; }
+            [Header( "ШиринаЕд_см" )]         public double? ItemWidth { get; set; }
+            [Header( "ВысотаЕд_см" )]         public double? ItemHeight { get; set; }
         }
 
         #endregion
