@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -9,13 +10,16 @@ using NUnit.Framework;
 namespace Agbm.NpoiExcel.Tests.IntegrationalTests
 {
     [TestFixture]
+    [ SuppressMessage( "ReSharper", "MemberCanBePrivate.Local" ) ]
     public class ExcelImporterIntegrationalTests
     {
         [SetUp]
         public void SetupCulture()
         {
-            CultureInfo.CurrentUICulture = new CultureInfo ("en-us");
+            CultureInfo.CurrentUICulture = new CultureInfo( "en-us" );
         }
+
+
 
         [Test]
         public void ImportData_ByDefault_ReturnsNotNullSheetTable()
@@ -24,11 +28,13 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
             var stream = GetExcelMemoryStream();
 
             // Action:
-            var sheetTable = ExcelImporter.GetSheetTable (stream, 0);
+            var sheetTable = ExcelImporter.GetSheetTable( stream );
 
             // Assert:
-            Assert.That (sheetTable, Is.Not.Null);
+            Assert.That( sheetTable, Is.Not.Null );
         }
+
+
 
         [ Test ]
         public void GetDataFromTable_ComplexTInt_RetutnsExpected ()
@@ -45,6 +51,8 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
 
             Assert.That( actual[0], Is.EqualTo( TestType.Expected ) );
         }
+
+
 
         #region Factory
 
@@ -78,6 +86,8 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
             return stream;
         }
 
+
+
         class TestType
         {
             public int IntType { get; set; }
@@ -94,7 +104,7 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
 
             public static object[] Data { get; } = new object[] { 0, "", 0.0, "", true, "", new DateTime( 2019, 2, 8, 12, 8, 0 ), "" };
 
-            public static TestType Expected= new TestType {
+            public static readonly TestType Expected= new TestType {
                 IntType = 0,
                 NullableIntType = null,
                 DoubleType = 0.0,
@@ -133,6 +143,11 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
                        && NullableBooleanType.Equals( obj.NullableBooleanType )
                        && DateTime.Equals( obj.DateTime )
                        && NullableDateTime.Equals( obj.NullableDateTime );
+            }
+
+            public override int GetHashCode ()
+            {
+                throw new NotImplementedException();
             }
         }
 
