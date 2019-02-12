@@ -14,6 +14,9 @@ using static Agbm.Helpers.EasyTypeBuilder;
 
 namespace Agbm.NpoiExcel
 {
+    /// <summary>
+    /// ICSharpCode.SharpZipLib must be added into app References.
+    /// </summary>
     public static class ExcelImporter
     {
 
