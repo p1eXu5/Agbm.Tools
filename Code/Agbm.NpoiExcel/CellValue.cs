@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Agbm.Helpers;
-using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
 
 namespace Agbm.NpoiExcel
 {
@@ -20,6 +13,10 @@ namespace Agbm.NpoiExcel
         private readonly ICell _cell;
 
         private readonly string _stringValue;
+
+        /// <summary>
+        /// Init with default value.
+        /// </summary>
         private double _doubleValue;
         private DateTime _dateTimeValue;
 
@@ -51,34 +48,20 @@ namespace Agbm.NpoiExcel
 
                 var stringValue = _cell.StringCellValue.Trim();
 
-                if ( stringValue.Length > 0 ) {
+                if ( stringValue.Length > 0 && stringValue.Length <= 30 ) {
 
-                    CultureInfo culture = null;
+                    if ( stringValue.ToUpperInvariant().Equals( "ДА" )
+                            || stringValue.ToUpperInvariant().Equals( "YES" ) ) {
 
-                    culture = CultureInfo.CreateSpecificCulture( "ru-RU" );
-
-                    try {
-                        _doubleValue = double.Parse( stringValue, culture );
-                    }
-                    catch ( FormatException ) {
-
-                        culture = CultureInfo.CreateSpecificCulture( "en-US" );
-
-                        try {
-                            _doubleValue = double.Parse( stringValue, culture );
-                        }
-                        catch ( FormatException ) { }
+                        _doubleValue = 1.0;
                     }
 
+                    if ( stringValue.Length == 1 && char.IsDigit( stringValue[ 0 ] ) ) return double.Parse( stringValue );
+                    if ( char.IsLetter( stringValue[ 0 ] ) || char.IsLetter( stringValue[ 0 ] ) ) return _doubleValue;
 
-                    if ( _doubleValue.Equals( default( double ) ) ) {
-
-                        if ( stringValue.ToUpperInvariant().Equals( "ДА" )
-                             || stringValue.ToUpperInvariant().Equals( "YES" ) ) {
-
-                            _doubleValue = 1.0;
-                        }
-                    }
+                    stringValue = stringValue.Replace( ',', '.' );
+                    double.TryParse( stringValue, out _doubleValue );
+                    return _doubleValue;
                 }
             }
             else if ( _cell.CellType == CellType.Boolean ) {

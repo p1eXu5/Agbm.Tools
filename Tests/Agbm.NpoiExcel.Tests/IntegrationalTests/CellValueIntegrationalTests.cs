@@ -200,19 +200,33 @@ namespace Agbm.NpoiExcel.Tests.IntegrationalTests
             // Assert:
             Assert.That (actual, Is.EqualTo (expected));
         }
-        
-        [TestCase ("0.0", 0.0)]
-        [TestCase ("0", 0.0)]
-        [TestCase (" -9876543.0123456789", -9876543.0123456789)]
-        [TestCase ("9876543.0123456789 ", 9876543.0123456789)]
-        [TestCase (" 9876543", 9876543.0)]
-        [TestCase ("-9876543 ", -9876543.0)]
+
+        [TestCase("0.0", 0.0)]
+        [TestCase("0", 0.0)]
+        [TestCase ("0.2", 0.2)]
+        [TestCase ("0,2", 0.2)]
+        [TestCase(" -9876543.0123456789", -9876543.0123456789)]
+        [TestCase("9876543.0123456789 ", 9876543.0123456789)]
+        [TestCase(" 9876543", 9876543.0)]
+        [TestCase("-9876543 ", -9876543.0)]
+        public void DoubleImplicit_CellIsNumericString_ReturnsValue(string value, double expected)
+        {
+            // Arrange:
+            var cellValue = new CellValue(GetStringCell(value));
+
+            // Action:
+            double actual = cellValue;
+
+            // Assert:
+            Assert.That (actual, Is.EqualTo (expected));
+        }
+
         [TestCase ("Да", 1.0)]
         [TestCase ("да", 1.0)]
         [TestCase ("дА", 1.0)]
         [TestCase ("ДА", 1.0)]
         [TestCase ("Yes", 1.0)]
-        public void DoubleImplicit_CellIsNumericOrTrueString_ReturnsValue(string value, double expected)
+        public void DoubleImplicit_CellIsTrueString_ReturnsValue(string value, double expected)
         {
             // Arrange:
             var cellValue = new CellValue(GetStringCell(value));
