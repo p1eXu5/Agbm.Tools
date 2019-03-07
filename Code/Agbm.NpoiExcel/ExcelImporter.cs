@@ -44,7 +44,7 @@ namespace Agbm.NpoiExcel
             try {
                 sheet = GetSheet(stream, sheetIndex);
             }
-            catch ( Exception ex ) {
+            catch ( Exception ) {
                 return new SheetTable();
             }
 
