@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Agbm.Helpers</RootNamespace>
     <AssemblyName>Agbm.Helpers</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -44,6 +44,11 @@
   <ItemGroup>
     <Compile Include="Extensions\ArrayExtensions.cs" />
     <Compile Include="EasyProperty.cs" />
+    <Compile Include="Monads\Maybe.cs" />
+    <Compile Include="Monads\MaybeExtensions.cs" />
+    <Compile Include="Monads\Monad.cs" />
+    <Compile Include="Monads\MonadExtensions.cs" />
+    <Compile Include="NumberWrittenTranslator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="EasyTypeBuilder.cs" />
